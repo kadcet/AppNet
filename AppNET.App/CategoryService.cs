@@ -14,6 +14,7 @@ namespace AppNET.App
     public class CategoryService : ICategoryService
     {
 
+
         private readonly IRepository<Category> _repositoryCategory;
 
         public CategoryService()
