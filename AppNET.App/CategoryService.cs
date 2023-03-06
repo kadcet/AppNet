@@ -15,6 +15,7 @@ namespace AppNET.App
     {
 
 
+
         private readonly IRepository<Category> _repositoryCategory;
 
         public CategoryService()
