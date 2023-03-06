@@ -1,0 +1,23 @@
+DOMAÝN KATMANI
+Uygulamamýzýn varlýklarý,servislerinin nasýl olacaðýný(product tipinin ýd si adý,stok mikarý hatta kdv
+sinin nasýl hesaplanacaðý vb. içerisinde metodlarýnda olduðu birçok geliþtirme bu katmanda yapýlýr.
+Product servisi yazýlacaksa producservisinin nasýl yazýlmasý gerektiðini,içinde olmasý gereken metodlarý,metodlarýn 
+ne döneceðini, içine nasýl bir parametrik yapý alacaðýna kadar buradaki Interface ler ile belirliyoruz
+Domain içindeki varlýk sýnýflarýmýz Product Customer gibi sýnýflarýn tamamen nesnel programlamaya uygun þekilde kodlanmasý
+gerekiyor ve veritabanýna,görsel katmana,baþka bir alt yapýya herhangi bir baðýmlýlýðýnýn olmamasý lazým
+
+Winform en uç noktam olur.
+WinForm = App katmanýyla haberleþiyor.
+
+ComboBox a category leri getirme
+Category listesini categoryservis ten tolist olarak çek
+deðiþkene at
+deðiþkeni combobox ýn datasorce sine cast et
+combobox.DisplayMemeber ile gelir
+categorinin ýd sini almak için ValueMember kullan
+
+
+
+
+
+
