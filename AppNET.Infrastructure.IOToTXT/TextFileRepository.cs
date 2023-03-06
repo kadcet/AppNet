@@ -66,6 +66,8 @@ namespace AppNET.Infrastructure.IOToTXT
         {
             LoadListFromFile();
 
+            
+
             return expression == null ? list : list.Where(expression).ToList();
 
             #region DİĞER UZUN YÖNTEMLER

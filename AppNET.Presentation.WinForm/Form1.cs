@@ -95,7 +95,7 @@ namespace AppNET.Presentation.WinForm
             }
             else
             {
-                productService.Update(Convert.ToInt32(txtProductId.Text),cmbCategortList.SelectedItem.ToString(), MyExtensions.FirstLetterUppercase(txtProductName.Text),Convert.ToInt32(txtProductStock.Text),Convert.ToDecimal(txtProductPrice.Text));
+                productService.Update(Convert.ToInt32(txtProductId.Text),cmbCategortList.Text, MyExtensions.FirstLetterUppercase(txtProductName.Text),Convert.ToInt32(txtProductStock.Text),Convert.ToDecimal(txtProductPrice.Text));
 
                 btnSaveProduct.Text = "KAYDET";
                 groupBox2.Text = "Yeni Ürün";
