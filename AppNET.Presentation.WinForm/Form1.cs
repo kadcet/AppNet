@@ -62,7 +62,7 @@ namespace AppNET.Presentation.WinForm
             if (result == DialogResult.No)
                 return;
 
-            var data = productService.GetAllProduct().Where(x => x.CategoryName == categoryName).ToList();
+            var data = productService.GetAllProduct().Where(x => x.CategoryName == categoryName);
 
             if (data != null)
             {
