@@ -44,15 +44,7 @@ namespace AppNET.App
 
         public bool Delete(int categoryId)
         {
-            liste = _repositoryProduct.GetList().ToList();
-
-            foreach (var item in liste)
-            {
-
-                _repositoryProduct.Remove(item);
-            }
-
-
+            
             return _repositoryCategory.Remove(categoryId);
         }
 
