@@ -48,6 +48,16 @@ namespace AppNET.App
             return _repositoryCategory.Remove(categoryId);
         }
 
+        public bool Delete(Category entity)
+        {
+           var list= _repositoryProduct.GetList().Where(x=>x.CategoryName==entity.Name).ToList();
+            foreach (var item in list)
+            {
+                _repositoryProduct.Remove(item);
+            }
+            return _repositoryCategory.Remove(entity);
+        }
+
         public IReadOnlyCollection<Category> GetAllCategory()
         {
             return _repositoryCategory.GetList().ToList().AsReadOnly();

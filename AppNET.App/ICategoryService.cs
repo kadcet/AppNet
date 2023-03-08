@@ -12,6 +12,7 @@ namespace AppNET.App
         void Created(int id, string name);
 
         bool Delete(int categoryId);
+        bool Delete(Category entity);
 
 
         IReadOnlyCollection<Category> GetAllCategory();

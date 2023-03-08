@@ -62,8 +62,11 @@ namespace AppNET.Presentation.WinForm
             if (result == DialogResult.No)
                 return;
 
-            int id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
-            categoryService.Delete(id);
+            Category category=new Category();
+            category.Id= Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
+            category.Name = grdCategory.CurrentRow.Cells["Name"].Value.ToString();
+            //int id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
+            categoryService.Delete(category);
             FillCategoryGrid();
         }
 
