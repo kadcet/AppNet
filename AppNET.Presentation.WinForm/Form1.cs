@@ -62,10 +62,9 @@ namespace AppNET.Presentation.WinForm
             if (result == DialogResult.No)
                 return;
 
+            var data = productService.GetAllProduct().Where(x => x.CategoryName == categoryName).ToList();
 
-            var data=productService.GetAllProduct().Where(x => x.Name == categoryName);
-
-            if (data!=null)
+            if (data != null)
             {
                 DialogResult result2 = MessageBox.Show($"Silmek istediðiniz{categoryName}'e ait ürünler mevcuttur.Silmek istediðinize emin misiniz...", "UYARI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result2 == DialogResult.Yes)
@@ -80,13 +79,11 @@ namespace AppNET.Presentation.WinForm
                 }
                 else
                 {
-                    
                     return;
-                        
                 }
-                
             }
             
+
         }
 
         private void duzenleToolStripMenuItem_Click(object sender, EventArgs e)
