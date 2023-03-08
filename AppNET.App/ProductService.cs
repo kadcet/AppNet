@@ -44,6 +44,11 @@ namespace AppNET.App
             _productRepository.Remove(productId);
         }
 
+        public void Deleted(Product entity)
+        {
+            _productRepository.Remove(entity);
+        }
+
         public IReadOnlyCollection<Product> GetAllProduct()
         {
             return _productRepository.GetList().ToList().AsReadOnly();

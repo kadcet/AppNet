@@ -12,6 +12,7 @@ namespace AppNET.App
         void Created(int id, string categoryName, string productName, int productStock, decimal productPrice);
 
         void Deleted(int productId);
+        void Deleted(Product entity);
 
         IReadOnlyCollection<Product> GetAllProduct();
 
