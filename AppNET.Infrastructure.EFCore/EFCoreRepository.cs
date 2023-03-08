@@ -30,6 +30,11 @@ namespace AppNET.Infrastructure.EFCore
             throw new NotImplementedException();
         }
 
+        public bool Remove(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public T Update(int id, T entity)
         {
             throw new NotImplementedException();

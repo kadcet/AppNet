@@ -14,6 +14,8 @@ namespace AppNET.Domain.Interfaces
 
         bool Remove(int id);
 
+        bool Remove(T entity);
+
         // Geriye tek bir entity almak istediğim zaman
         T GetBeyId(int id);
 

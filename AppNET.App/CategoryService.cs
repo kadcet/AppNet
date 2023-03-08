@@ -1,4 +1,5 @@
 ﻿using AppNET.Domain.Entities;
+using AppNET.Domain.Entities.Base;
 using AppNET.Domain.Interfaces;
 using AppNET.Infrastructure;
 using AppNET.Infrastructure.IOToTXT;
@@ -15,12 +16,14 @@ namespace AppNET.App
     {
 
 
-
+        private List<Product> liste = new List<Product>();
         private readonly IRepository<Category> _repositoryCategory;
+        private readonly IRepository<Product> _repositoryProduct;
 
         public CategoryService()
         {
             _repositoryCategory=IOCContainer.Resolve<IRepository<Category>>();
+            _repositoryProduct = IOCContainer.Resolve<IRepository<Product>>();
         }
 
 
@@ -41,6 +44,15 @@ namespace AppNET.App
 
         public bool Delete(int categoryId)
         {
+            liste = _repositoryProduct.GetList().ToList();
+            //liste.Where(x=>x.Name==)
+            foreach (var item in liste)
+            {
+                
+                _repositoryProduct.Remove(item);
+            }
+            
+
             return _repositoryCategory.Remove(categoryId);
         }
 
