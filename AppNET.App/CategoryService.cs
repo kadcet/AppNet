@@ -53,9 +53,9 @@ namespace AppNET.App
            var list= _repositoryProduct.GetList().Where(x=>x.CategoryName==entity.Name).ToList();
             foreach (var item in list)
             {
-                _repositoryProduct.Remove(item);
+                _repositoryProduct.Remove(item.Id);
             }
-            return _repositoryCategory.Remove(entity);
+            return _repositoryCategory.Remove(entity.Id);
         }
 
         public IReadOnlyCollection<Category> GetAllCategory()

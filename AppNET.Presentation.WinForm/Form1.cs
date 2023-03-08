@@ -62,12 +62,31 @@ namespace AppNET.Presentation.WinForm
             if (result == DialogResult.No)
                 return;
 
-            Category category=new Category();
-            category.Id= Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
-            category.Name = grdCategory.CurrentRow.Cells["Name"].Value.ToString();
-            //int id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
-            categoryService.Delete(category);
-            FillCategoryGrid();
+
+            var data=productService.GetAllProduct().Where(x => x.Name == categoryName);
+
+            if (data!=null)
+            {
+                DialogResult result2 = MessageBox.Show($"Silmek istediðiniz{categoryName}'e ait ürünler mevcuttur.Silmek istediðinize emin misiniz...", "UYARI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result2 == DialogResult.Yes)
+                {
+                    Category category = new Category();
+                    category.Id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
+                    category.Name = grdCategory.CurrentRow.Cells["Name"].Value.ToString();
+                    int id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
+                    bool x = categoryService.Delete(category);
+
+                    FillCategoryGrid();
+                }
+                else
+                {
+                    
+                    return;
+                        
+                }
+                
+            }
+            
         }
 
         private void duzenleToolStripMenuItem_Click(object sender, EventArgs e)
