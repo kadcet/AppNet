@@ -11,12 +11,13 @@ namespace AppNET.App
     {
         void Created(int id, string categoryName, string productName, int productStock, decimal productPrice);
 
-        void Deleted(int productId);
-        void Deleted(Product entity);
-
+        bool Deleted(int productId);
+        
         IReadOnlyCollection<Product> GetAllProduct();
 
         Product Update(int productId,string categoryName,string newProductName,int stock,decimal price);
+
+        bool DeleteProductsByCategory(string categoryName);
     }
 
     

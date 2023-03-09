@@ -18,12 +18,11 @@ namespace AppNET.App
 
         private List<Product> liste = new List<Product>();
         private readonly IRepository<Category> _repositoryCategory;
-        private readonly IRepository<Product> _repositoryProduct;
+        
 
         public CategoryService()
         {
             _repositoryCategory=IOCContainer.Resolve<IRepository<Category>>();
-            _repositoryProduct = IOCContainer.Resolve<IRepository<Product>>();
         }
 
 
@@ -48,15 +47,7 @@ namespace AppNET.App
             return _repositoryCategory.Remove(categoryId);
         }
 
-        public bool Delete(Category entity)
-        {
-           var list= _repositoryProduct.GetList().Where(x=>x.CategoryName==entity.Name).ToList();
-            foreach (var item in list)
-            {
-                _repositoryProduct.Remove(item.Id);
-            }
-            return _repositoryCategory.Remove(entity.Id);
-        }
+ 
 
         public IReadOnlyCollection<Category> GetAllCategory()
         {

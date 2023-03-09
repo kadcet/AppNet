@@ -39,15 +39,11 @@ namespace AppNET.App
 
         
 
-        public void Deleted(int productId)
+        public bool Deleted(int productId)
         {
-            _productRepository.Remove(productId);
+           return _productRepository.Remove(productId);
         }
-
-        public void Deleted(Product entity)
-        {
-            _productRepository.Remove(entity);
-        }
+ 
 
         public IReadOnlyCollection<Product> GetAllProduct()
         {
@@ -67,8 +63,16 @@ namespace AppNET.App
             product.Price = price;
             return _productRepository.Update(productId, product);
 
-            
+        }
 
+        public bool DeleteProductsByCategory(string categoryName)
+        {
+            var list = _productRepository.GetList().Where(x => x.CategoryName == categoryName).ToList();
+            foreach (var item in list)
+            {
+                _productRepository.Remove(item.Id);
+            }
+            return true;
         }
     }
 }

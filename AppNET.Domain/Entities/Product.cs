@@ -16,5 +16,6 @@ namespace AppNET.Domain.Entities
         public decimal Price { get; set; }
 
         public string CategoryName { get; set; }
+        //public int CategoryId { get; set; }
     }
 }

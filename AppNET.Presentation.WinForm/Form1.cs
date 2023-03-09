@@ -13,9 +13,9 @@ namespace AppNET.Presentation.WinForm
         }
 
         ICategoryService categoryService = IOCContainer.Resolve<ICategoryService>();
-        IProductService productService=IOCContainer.Resolve<IProductService>();
+        IProductService productService = IOCContainer.Resolve<IProductService>();
 
-        
+
         private void FillProductGrid()
         {
             grdProduct.DataSource = productService.GetAllProduct();
@@ -24,15 +24,21 @@ namespace AppNET.Presentation.WinForm
         {
             grdCategory.DataSource = categoryService.GetAllCategory();
         }
+        private void FillCombobox()
+        {
+            var data = categoryService.GetAllCategory().ToList();
+            cmbCategortList.DataSource = data;
+            cmbCategortList.DisplayMember = nameof(Category.Name);
+            cmbCategortList.Text = "";
+
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             FillProductGrid();
             FillCategoryGrid();
-            var data = categoryService.GetAllCategory().ToList();
-            cmbCategortList.DataSource = data;
-            cmbCategortList.DisplayMember = nameof(Category.Name);
+            FillCombobox();
         }
-        
+
 
         private void btnSaveCategory_Click(object sender, EventArgs e)
         {
@@ -50,40 +56,53 @@ namespace AppNET.Presentation.WinForm
             }
             txtCategoryId.Text = "";
             txtCategoryName.Text = "";
-            
+
+            FillCombobox();
             FillCategoryGrid();
         }
 
         private void silToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string categoryName = grdCategory.CurrentRow.Cells["Name"].Value.ToString();
-            DialogResult result= MessageBox.Show($"{categoryName} kategorisini silmek istediðinizden emin misiniz?", "Silme Onayý", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.No)
-                return;
+            string categoryName = grdCategory.CurrentRow.Cells["Name"].Value?.ToString() ?? "";
+            var categoryId = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
+            if (string.IsNullOrEmpty(categoryName)) return;
+            
 
             var data = productService.GetAllProduct().Where(x => x.CategoryName == categoryName);
 
-            if (data != null)
+            var userMsg = "";
+            if (data.Count() != 0)
             {
-                DialogResult result2 = MessageBox.Show($"Silmek istediðiniz{categoryName}'e ait ürünler mevcuttur.Silmek istediðinize emin misiniz...", "UYARI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (result2 == DialogResult.Yes)
-                {
-                    Category category = new Category();
-                    category.Id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
-                    category.Name = grdCategory.CurrentRow.Cells["Name"].Value.ToString();
-                    int id = Convert.ToInt32(grdCategory.CurrentRow.Cells["Id"].Value);
-                    bool x = categoryService.Delete(category);
-
-                    FillCategoryGrid();
-                }
-                else
-                {
-                    return;
-                }
+                userMsg = $"{categoryName} Ýsimli Kategori ve Ona Baðlý {data.Count()} Adet Ürün Silinecektir.";
             }
-            
+            else
+            {
+                userMsg = $"{categoryName} Ýsimli Kategori Silinecek. Bu kategoriye baðlý ürün bulunmamaktadýr.";
+            }
 
+
+            DialogResult result = MessageBox.Show($"{userMsg} {Environment.NewLine} Devam Etmek istiyormusunu?", "Silme Onayý", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.No) return;
+            
+            #region Category Delete
+            bool x = categoryService.Delete(categoryId);
+            FillCategoryGrid();
+            FillCombobox();
+            #endregion Category Delete
+
+            #region Product Delete
+            if (data.Count()!=0)
+            {
+                var isDeleted = productService.DeleteProductsByCategory(categoryName);
+                FillProductGrid();
+            }
+
+
+           
+
+
+            #endregion Product Delete
         }
 
         private void duzenleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -108,13 +127,13 @@ namespace AppNET.Presentation.WinForm
                 int id = Convert.ToInt32(txtProductId.Text);
                 //string selectedCategoryName =Convert.ToString(cmbCategortList.SelectedValue);
                 var selectedCategoryName = cmbCategortList.Text;
-               
-                productService.Created(id, selectedCategoryName,Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)) , Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
-                
+
+                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
+
             }
             else
             {
-                productService.Update(Convert.ToInt32(txtProductId.Text),cmbCategortList.Text, MyExtensions.FirstLetterUppercase(txtProductName.Text),Convert.ToInt32(txtProductStock.Text),Convert.ToDecimal(txtProductPrice.Text));
+                productService.Update(Convert.ToInt32(txtProductId.Text), cmbCategortList.Text, MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
 
                 btnSaveProduct.Text = "KAYDET";
                 groupBox2.Text = "Yeni Ürün";
@@ -126,6 +145,7 @@ namespace AppNET.Presentation.WinForm
             txtProductPrice.Clear();
             txtProductStock.Clear();
 
+            
             FillProductGrid();
         }
 
@@ -157,7 +177,7 @@ namespace AppNET.Presentation.WinForm
             txtProductStock.Text = Convert.ToString(stock);
             txtProductPrice.Text = Convert.ToString(price);
 
-            
+
 
             txtProductId.Enabled = false;
             btnSaveProduct.Text = "GÜNCELLE";
