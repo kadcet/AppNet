@@ -12,8 +12,10 @@ namespace AppNET.Presentation.WinForm
             InitializeComponent();
         }
 
+        private readonly List<Product> productList = new List<Product>();
         ICategoryService categoryService = IOCContainer.Resolve<ICategoryService>();
         IProductService productService = IOCContainer.Resolve<IProductService>();
+        ICaseSevice Case=IOCContainer.Resolve<ICaseSevice>();
 
 
         private void FillProductGrid()
@@ -24,6 +26,7 @@ namespace AppNET.Presentation.WinForm
         {
             grdCategory.DataSource = categoryService.GetAllCategory();
         }
+
         private void FillCombobox()
         {
             var data = categoryService.GetAllCategory().ToList();
@@ -44,8 +47,8 @@ namespace AppNET.Presentation.WinForm
         {
             if (btnSaveCategory.Text == "KAYDET")
             {
-                int id = Convert.ToInt32(txtCategoryId.Text);
-                categoryService.Created(id, txtCategoryName.Text);
+                //int id = Convert.ToInt32(txtCategoryId.Text);
+                categoryService.Created(Convert.ToInt32(txtCategoryId.Text), txtCategoryName.Text);
             }
             else
             {
@@ -128,12 +131,31 @@ namespace AppNET.Presentation.WinForm
                 //string selectedCategoryName =Convert.ToString(cmbCategortList.SelectedValue);
                 var selectedCategoryName = cmbCategortList.Text;
 
-                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
+                
+
+                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductAmount.Text), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(txtProductTotalPrice.Text),Domain.ProcessType.Expense);
+                MessageBox.Show($"{MyExtensions.FirstLetterUppercase(txtProductName.Text.ToString()) } Ürününden {txtProductAmount.Text.ToString()} Adet satýn alýndý");
 
             }
-            else
+            else if (btnSaveProduct.Text=="SATIÞ")
             {
-                productService.Update(Convert.ToInt32(txtProductId.Text), cmbCategortList.Text, MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
+                var list=productService.GetAllProduct().FirstOrDefault(x => x.Name == txtProductName.Text);
+
+                if (Convert.ToInt32(txtProductAmount.Text) > list.Amount)
+                {
+                    MessageBox.Show($"En fazla {Convert.ToInt32(list.Amount)} adet ürün satýlabilir ");
+                    return;
+                }
+                
+                    
+                
+
+                productService.Update(Convert.ToInt32(txtProductId.Text), Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(Convert.ToInt32(list.Amount)-Convert.ToInt32(txtProductAmount.Text)), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(list.TotalPrice)-Convert.ToDecimal(txtProductTotalPrice.Text),Domain.ProcessType.Income);
+                FillProductGrid();
+            }
+            else if(btnSaveProduct.Text=="GÜNCELLE")
+            {
+                productService.Update(Convert.ToInt32(txtProductId.Text),Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text),Convert.ToInt32(txtProductAmount.Text),Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text),Convert.ToDecimal(txtProductTotalPrice.Text) );
 
                 btnSaveProduct.Text = "KAYDET";
                 groupBox2.Text = "Yeni Ürün";
@@ -142,8 +164,10 @@ namespace AppNET.Presentation.WinForm
 
             txtProductId.Text = "";
             txtProductName.Clear();
-            txtProductPrice.Clear();
-            txtProductStock.Clear();
+            txtProductPurchasePrice.Clear();
+            txtProductAmount.Clear();
+            txtProductTotalPrice.Clear();
+            txtProductSalesPrice.Clear();
 
             
             FillProductGrid();
@@ -167,21 +191,76 @@ namespace AppNET.Presentation.WinForm
             string id = grdProduct.CurrentRow.Cells["Id"].Value.ToString();
             var categoryName = grdProduct.CurrentRow.Cells["CategoryName"].Value.ToString();
             string productName = grdProduct.CurrentRow.Cells["Name"].Value.ToString();
-            var stock = Convert.ToInt32(grdProduct.CurrentRow.Cells["Stock"].Value.ToString());
-            var price = Convert.ToDecimal(grdProduct.CurrentRow.Cells["Price"].Value.ToString());
+            var productAmount = grdProduct.CurrentRow.Cells["Amount"].Value.ToString();
+            var productPurchasePrice = grdProduct.CurrentRow.Cells["PurchasePrice"].Value.ToString();
+            var productSalesPrice= grdProduct.CurrentRow.Cells["SalesPrice"].Value.ToString();
+            var totalPrice = grdProduct.CurrentRow.Cells["TotalPrice"].Value.ToString();
+           
 
 
             txtProductId.Text = id;
             txtProductName.Text = productName;
             cmbCategortList.Text = categoryName;
-            txtProductStock.Text = Convert.ToString(stock);
-            txtProductPrice.Text = Convert.ToString(price);
+            txtProductAmount.Text = productAmount;
+            txtProductPurchasePrice.Text = productPurchasePrice;
+            txtProductSalesPrice.Text = productSalesPrice;
+            txtProductTotalPrice.Text = totalPrice;
 
 
 
             txtProductId.Enabled = false;
             btnSaveProduct.Text = "GÜNCELLE";
             groupBox2.Text = "Ürün Güncelle";
+        }
+
+        private void textProductAmount_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProductPurchasePrice.Text == "") txtProductPurchasePrice.Text = "0";
+            if (txtProductAmount.Text == "") txtProductAmount.Text = "0";
+
+            decimal alisFiyat =Convert.ToDecimal(txtProductPurchasePrice.Text);
+            int alisAdet = Convert.ToInt32(txtProductAmount.Text);
+            txtProductTotalPrice.Text = (alisFiyat * alisAdet).ToString();
+
+        }
+
+        private void txtProductPurchasePrice_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProductPurchasePrice.Text == "") txtProductPurchasePrice.Text = "0";
+            if (txtProductAmount.Text == "") txtProductAmount.Text = "0";
+
+            decimal alisFiyat = Convert.ToDecimal(txtProductPurchasePrice.Text);
+            int alisAdet = Convert.ToInt32(txtProductAmount.Text);
+            txtProductTotalPrice.Text = (alisFiyat * alisAdet).ToString();
+        }
+
+        private void satisYapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string id = grdProduct.CurrentRow.Cells["Id"].Value.ToString();
+            var categoryName = grdProduct.CurrentRow.Cells["CategoryName"].Value.ToString();
+            string productName = grdProduct.CurrentRow.Cells["Name"].Value.ToString();
+            var productAmount = grdProduct.CurrentRow.Cells["Amount"].Value.ToString();
+            var productPurchasePrice = grdProduct.CurrentRow.Cells["PurchasePrice"].Value.ToString();
+            var productSalesPrice = grdProduct.CurrentRow.Cells["SalesPrice"].Value.ToString();
+            var totalPrice = grdProduct.CurrentRow.Cells["TotalPrice"].Value.ToString();
+
+
+
+            txtProductId.Text = id;
+            txtProductName.Text = productName;
+            cmbCategortList.Text = categoryName;
+            txtProductAmount.Text = productAmount;
+            txtProductPurchasePrice.Text = productPurchasePrice;
+            txtProductSalesPrice.Text = productSalesPrice;
+            txtProductTotalPrice.Text = totalPrice;
+
+            txtProductId.Enabled = false;
+            txtProductName.Enabled = false;
+            txtCategoryName.Enabled = false;
+            txtProductPurchasePrice.Enabled = false;
+            
+            btnSaveProduct.Text = "SATIÞ";
+            groupBox2.Text = "Ürün Satýþý";
         }
     }
 }

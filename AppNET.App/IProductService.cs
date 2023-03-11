@@ -1,4 +1,5 @@
-﻿using AppNET.Domain.Entities;
+﻿using AppNET.Domain;
+using AppNET.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,15 @@ namespace AppNET.App
 {
     public interface IProductService
     {
-        void Created(int id, string categoryName, string productName, int productStock, decimal productPrice);
+        void Created(int id, string categoryName, string productName, int productAmount, decimal productPurchasePrice,decimal productSalesPrice, decimal productTotalPrice,ProcessType type);
 
         bool Deleted(int productId);
         
         IReadOnlyCollection<Product> GetAllProduct();
 
-        Product Update(int productId,string categoryName,string newProductName,int stock,decimal price);
+        Product Update(int productId,string categoryName,string newProductName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice);
+
+        Product Update(int productId, string categoryName, string newProductName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice,ProcessType type);
 
         bool DeleteProductsByCategory(string categoryName);
     }
