@@ -10,15 +10,13 @@ namespace AppNET.App
 {
     public interface IProductService
     {
-        void Created(int id, string categoryName, string productName, int productAmount, decimal productPurchasePrice,decimal productSalesPrice, decimal productTotalPrice,ProcessType type);
+        void Created(int id, string categoryName, string productName, int productAmount, decimal productPurchasePrice,decimal productSalesPrice, decimal productTotalPrice);
 
         bool Deleted(int productId);
         
         IReadOnlyCollection<Product> GetAllProduct();
 
-        Product Update(int productId,string categoryName,string newProductName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice);
-
-        Product Update(int productId, string categoryName, string newProductName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice,ProcessType type);
+        Product Update(int productId, string categoryName, string newProductName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice);
 
         bool DeleteProductsByCategory(string categoryName);
     }

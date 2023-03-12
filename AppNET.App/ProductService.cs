@@ -16,12 +16,13 @@ namespace AppNET.App
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> _productRepository;
+        
 
         public ProductService()
         {
             _productRepository = IOCContainer.Resolve<IRepository<Product>>();
         }
-        public void Created(int id, string categoryName, string productName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice, ProcessType type)
+        public void Created(int id, string categoryName, string productName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice)
         {
             if (string.IsNullOrWhiteSpace(productName))
                 throw new ArgumentException("Ürün İsmi Boş Olamaz");
@@ -38,8 +39,10 @@ namespace AppNET.App
             product.PurchasePrice = productPurchasePrice;
             product.SalesPrice = productSalesPrice;
             product.TotalPrice= productTotalPrice;
-            product.Typee = ProcessType.Expense;
+            //product.Typee = ProcessType.Expense;
             _productRepository.Add(product);
+            
+            
         }
 
         
@@ -85,13 +88,9 @@ namespace AppNET.App
             product.PurchasePrice = productPurchasePrice;
             product.SalesPrice = productSalesPrice;
             product.TotalPrice = productTotalPrice;
-            product.Typee = ProcessType.Income;
+            //product.Typee = ProcessType.Income;
             return _productRepository.Update(productId, product);
         }
-
-
-
-
 
         public bool DeleteProductsByCategory(string categoryName)
         {

@@ -2,6 +2,7 @@ using AppNET.App;
 using AppNET.Domain.Entities;
 using AppNET.Infrastructure;
 using AppNET.Infrastructure.Controls;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AppNET.Presentation.WinForm
 {
@@ -12,10 +13,10 @@ namespace AppNET.Presentation.WinForm
             InitializeComponent();
         }
 
-        private readonly List<Product> productList = new List<Product>();
+        
         ICategoryService categoryService = IOCContainer.Resolve<ICategoryService>();
         IProductService productService = IOCContainer.Resolve<IProductService>();
-        ICaseSevice Case=IOCContainer.Resolve<ICaseSevice>();
+        ICaseSevice caseSevice=IOCContainer.Resolve<ICaseSevice>();
 
 
         private void FillProductGrid()
@@ -25,6 +26,16 @@ namespace AppNET.Presentation.WinForm
         private void FillCategoryGrid()
         {
             grdCategory.DataSource = categoryService.GetAllCategory();
+        }
+
+        private void FillCaseGrid()
+        {
+            grdCase.DataSource = caseSevice.CaseList();
+        }
+
+        private void FillBalance()
+        {
+            lblBalance.Text = caseSevice.Balance().ToString();
         }
 
         private void FillCombobox()
@@ -40,6 +51,8 @@ namespace AppNET.Presentation.WinForm
             FillProductGrid();
             FillCategoryGrid();
             FillCombobox();
+            FillCaseGrid();
+            FillBalance();
         }
 
 
@@ -62,6 +75,7 @@ namespace AppNET.Presentation.WinForm
 
             FillCombobox();
             FillCategoryGrid();
+            
         }
 
         private void silToolStripMenuItem_Click(object sender, EventArgs e)
@@ -133,8 +147,14 @@ namespace AppNET.Presentation.WinForm
 
                 
 
-                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductAmount.Text), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(txtProductTotalPrice.Text),Domain.ProcessType.Expense);
+                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductAmount.Text), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(txtProductTotalPrice.Text));
                 MessageBox.Show($"{MyExtensions.FirstLetterUppercase(txtProductName.Text.ToString()) } Ürününden {txtProductAmount.Text.ToString()} Adet satýn alýndý");
+                
+                
+                caseSevice.Exp(MyExtensions.FirstLetterUppercase((txtProductName.Text.ToString().ToString()+" Ürününden "+ Convert.ToInt32(txtProductAmount.Text.ToString())+" Adet Alýnmýþtýr.")), Convert.ToInt32(txtProductAmount.Text), (Convert.ToDecimal(txtProductAmount.Text) * Convert.ToDecimal(txtProductPurchasePrice.Text)));
+
+                FillCaseGrid();
+                FillBalance();
 
             }
             else if (btnSaveProduct.Text=="SATIÞ")
@@ -146,16 +166,17 @@ namespace AppNET.Presentation.WinForm
                     MessageBox.Show($"En fazla {Convert.ToInt32(list.Amount)} adet ürün satýlabilir ");
                     return;
                 }
-                
-                    
-                
 
-                productService.Update(Convert.ToInt32(txtProductId.Text), Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(Convert.ToInt32(list.Amount)-Convert.ToInt32(txtProductAmount.Text)), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(list.TotalPrice)-Convert.ToDecimal(txtProductTotalPrice.Text),Domain.ProcessType.Income);
+                productService.Update(Convert.ToInt32(txtProductId.Text), Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(Convert.ToInt32(list.Amount)-Convert.ToInt32(txtProductAmount.Text)), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(list.TotalPrice)-Convert.ToDecimal(txtProductTotalPrice.Text));
+
+                caseSevice.Inc(MyExtensions.FirstLetterUppercase((txtProductName.Text.ToString().ToString() + " Ürününden " + Convert.ToInt32(txtProductAmount.Text.ToString()) + " Adet Satýlmýþtýr.")), Convert.ToInt32(txtProductAmount.Text), (Convert.ToDecimal(txtProductAmount.Text) * Convert.ToDecimal(txtProductSalesPrice.Text)));
+                FillCaseGrid();
                 FillProductGrid();
+                FillBalance();
             }
             else if(btnSaveProduct.Text=="GÜNCELLE")
             {
-                productService.Update(Convert.ToInt32(txtProductId.Text),Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text),Convert.ToInt32(txtProductAmount.Text),Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text),Convert.ToDecimal(txtProductTotalPrice.Text) );
+                productService.Update(Convert.ToInt32(txtProductId.Text),Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text),Convert.ToInt32(txtProductAmount.Text),Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text),Convert.ToDecimal(txtProductTotalPrice.Text));
 
                 btnSaveProduct.Text = "KAYDET";
                 groupBox2.Text = "Yeni Ürün";
@@ -183,6 +204,7 @@ namespace AppNET.Presentation.WinForm
 
             int id = Convert.ToInt32(grdProduct.CurrentRow.Cells["Id"].Value);
             productService.Deleted(id);
+            caseSevice.Deleted(id);
             FillProductGrid();
         }
 
@@ -262,5 +284,22 @@ namespace AppNET.Presentation.WinForm
             btnSaveProduct.Text = "SATIÞ";
             groupBox2.Text = "Ürün Satýþý";
         }
+
+        private void btnIncome_Click(object sender, EventArgs e)
+        {
+            grdCase.DataSource = caseSevice.CaseListIncome();
+        }
+
+        private void btnAllCase_Click(object sender, EventArgs e)
+        {
+            FillCaseGrid();
+        }
+
+        private void btnExplatanion_Click(object sender, EventArgs e)
+        {
+            grdCase.DataSource = caseSevice.CaseListExplanation();
+        }
+
+       
     }
 }

@@ -15,6 +15,6 @@ namespace AppNET.Domain.Entities
 
         public string Explanation { get; set; }
 
-        public ProcessType ProcessType { get; set; }
+        public ProcessType? ProcessType { get; set; }
     }
 }

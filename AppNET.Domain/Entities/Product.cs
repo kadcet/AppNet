@@ -22,7 +22,7 @@ namespace AppNET.Domain.Entities
         public string CategoryName { get; set; }
         //public int CategoryId { get; set; }
 
-        public ProcessType Typee { get; set; }
+        //public ProcessType Typee { get; set; }
     }
 }
 

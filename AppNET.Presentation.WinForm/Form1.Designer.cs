@@ -45,6 +45,7 @@
             this.silToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.düzenleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.satışYapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtProductSalesPrice = new System.Windows.Forms.TextBox();
@@ -61,13 +62,19 @@
             this.btnSaveProduct = new System.Windows.Forms.Button();
             this.txtProductName = new System.Windows.Forms.TextBox();
             this.txtProductId = new System.Windows.Forms.TextBox();
-            this.satışYapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.grdCase = new System.Windows.Forms.DataGridView();
+            this.btnIncome = new System.Windows.Forms.Button();
+            this.btnExplatanion = new System.Windows.Forms.Button();
+            this.btnAllCase = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.lblBalance = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdCategory)).BeginInit();
             this.ctxGrdCategoryMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdProduct)).BeginInit();
             this.ctxGridProduct.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdCase)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -136,7 +143,7 @@
             this.grdCategory.RowHeadersVisible = false;
             this.grdCategory.RowTemplate.Height = 25;
             this.grdCategory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grdCategory.Size = new System.Drawing.Size(398, 252);
+            this.grdCategory.Size = new System.Drawing.Size(398, 106);
             this.grdCategory.TabIndex = 1;
             // 
             // ctxGrdCategoryMenu
@@ -188,26 +195,33 @@
             this.toolStripSeparator2,
             this.satışYapToolStripMenuItem});
             this.ctxGridProduct.Name = "ctxGridProduct";
-            this.ctxGridProduct.Size = new System.Drawing.Size(181, 98);
+            this.ctxGridProduct.Size = new System.Drawing.Size(121, 76);
             // 
             // silToolStripMenuItem1
             // 
             this.silToolStripMenuItem1.Name = "silToolStripMenuItem1";
-            this.silToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.silToolStripMenuItem1.Size = new System.Drawing.Size(120, 22);
             this.silToolStripMenuItem1.Text = "Sil";
             this.silToolStripMenuItem1.Click += new System.EventHandler(this.silToolStripMenuItem1_Click);
             // 
             // düzenleToolStripMenuItem1
             // 
             this.düzenleToolStripMenuItem1.Name = "düzenleToolStripMenuItem1";
-            this.düzenleToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.düzenleToolStripMenuItem1.Size = new System.Drawing.Size(120, 22);
             this.düzenleToolStripMenuItem1.Text = "Düzenle";
             this.düzenleToolStripMenuItem1.Click += new System.EventHandler(this.duzenleToolStripMenuItem1_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(117, 6);
+            // 
+            // satışYapToolStripMenuItem
+            // 
+            this.satışYapToolStripMenuItem.Name = "satışYapToolStripMenuItem";
+            this.satışYapToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.satışYapToolStripMenuItem.Text = "Satış Yap";
+            this.satışYapToolStripMenuItem.Click += new System.EventHandler(this.satisYapToolStripMenuItem_Click);
             // 
             // groupBox2
             // 
@@ -359,23 +373,82 @@
             this.txtProductId.Size = new System.Drawing.Size(243, 23);
             this.txtProductId.TabIndex = 0;
             // 
-            // satışYapToolStripMenuItem
+            // grdCase
             // 
-            this.satışYapToolStripMenuItem.Name = "satışYapToolStripMenuItem";
-            this.satışYapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.satışYapToolStripMenuItem.Text = "Satış Yap";
-            this.satışYapToolStripMenuItem.Click += new System.EventHandler(this.satisYapToolStripMenuItem_Click);
+            this.grdCase.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.grdCase.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdCase.ContextMenuStrip = this.ctxGridProduct;
+            this.grdCase.Location = new System.Drawing.Point(24, 381);
+            this.grdCase.Name = "grdCase";
+            this.grdCase.RowHeadersVisible = false;
+            this.grdCase.RowTemplate.Height = 25;
+            this.grdCase.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grdCase.Size = new System.Drawing.Size(398, 134);
+            this.grdCase.TabIndex = 4;
+            // 
+            // btnIncome
+            // 
+            this.btnIncome.Location = new System.Drawing.Point(30, 356);
+            this.btnIncome.Name = "btnIncome";
+            this.btnIncome.Size = new System.Drawing.Size(75, 23);
+            this.btnIncome.TabIndex = 5;
+            this.btnIncome.Text = "Gelir";
+            this.btnIncome.UseVisualStyleBackColor = true;
+            this.btnIncome.Click += new System.EventHandler(this.btnIncome_Click);
+            // 
+            // btnExplatanion
+            // 
+            this.btnExplatanion.Location = new System.Drawing.Point(125, 356);
+            this.btnExplatanion.Name = "btnExplatanion";
+            this.btnExplatanion.Size = new System.Drawing.Size(75, 23);
+            this.btnExplatanion.TabIndex = 6;
+            this.btnExplatanion.Text = "Gider";
+            this.btnExplatanion.UseVisualStyleBackColor = true;
+            this.btnExplatanion.Click += new System.EventHandler(this.btnExplatanion_Click);
+            // 
+            // btnAllCase
+            // 
+            this.btnAllCase.Location = new System.Drawing.Point(226, 356);
+            this.btnAllCase.Name = "btnAllCase";
+            this.btnAllCase.Size = new System.Drawing.Size(196, 23);
+            this.btnAllCase.TabIndex = 7;
+            this.btnAllCase.Text = "Tüm Kasa Hareketleri";
+            this.btnAllCase.UseVisualStyleBackColor = true;
+            this.btnAllCase.Click += new System.EventHandler(this.btnAllCase_Click);
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(31, 523);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(100, 23);
+            this.label10.TabIndex = 8;
+            this.label10.Text = "Kasa Bakiyesi";
+            // 
+            // lblBalance
+            // 
+            this.lblBalance.Location = new System.Drawing.Point(137, 523);
+            this.lblBalance.Name = "lblBalance";
+            this.lblBalance.Size = new System.Drawing.Size(100, 23);
+            this.lblBalance.TabIndex = 9;
+            this.lblBalance.Text = "Kasa Bakiyesi";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1006, 514);
+            this.ClientSize = new System.Drawing.Size(1006, 553);
+            this.Controls.Add(this.lblBalance);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.btnAllCase);
+            this.Controls.Add(this.btnExplatanion);
+            this.Controls.Add(this.btnIncome);
+            this.Controls.Add(this.grdCase);
             this.Controls.Add(this.grdProduct);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.grdCategory);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
@@ -386,6 +459,7 @@
             this.ctxGridProduct.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdCase)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -425,5 +499,11 @@
         private Label label9;
         private TextBox txtProductSalesPrice;
         private ToolStripMenuItem satışYapToolStripMenuItem;
+        private DataGridView grdCase;
+        private Button btnIncome;
+        private Button btnExplatanion;
+        private Button btnAllCase;
+        private Label label10;
+        private Label lblBalance;
     }
 }
