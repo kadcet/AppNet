@@ -35,7 +35,18 @@ namespace AppNET.Presentation.WinForm
 
         private void FillBalance()
         {
-            lblBalance.Text = caseSevice.Balance().ToString();
+            var data= caseSevice.Balance().ToString();
+            if (caseSevice.Balance() < 0)
+            {
+                lblBalance.ForeColor = Color.Red;
+                lblBalance.Text = caseSevice.Balance().ToString();
+            }
+            else
+            {
+                lblBalance.ForeColor = Color.Black;
+                lblBalance.Text = caseSevice.Balance().ToString();
+            }
+                
         }
 
         private void FillCombobox()
@@ -170,6 +181,10 @@ namespace AppNET.Presentation.WinForm
                 productService.Update(Convert.ToInt32(txtProductId.Text), Convert.ToString(cmbCategortList.Text), MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(Convert.ToInt32(list.Amount)-Convert.ToInt32(txtProductAmount.Text)), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(list.TotalPrice)-Convert.ToDecimal(txtProductTotalPrice.Text));
 
                 caseSevice.Inc(MyExtensions.FirstLetterUppercase((txtProductName.Text.ToString().ToString() + " Ürününden " + Convert.ToInt32(txtProductAmount.Text.ToString()) + " Adet Satýlmýþtýr.")), Convert.ToInt32(txtProductAmount.Text), (Convert.ToDecimal(txtProductAmount.Text) * Convert.ToDecimal(txtProductSalesPrice.Text)));
+                btnSaveProduct.Text = "KAYDET";
+                groupBox2.Text = "Yeni Ürün";
+                txtCategoryName.Enabled = true;
+                txtProductId.Enabled = true;
                 FillCaseGrid();
                 FillProductGrid();
                 FillBalance();
