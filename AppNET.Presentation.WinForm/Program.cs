@@ -14,7 +14,10 @@ namespace AppNET.Presentation.WinForm
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             ApplicationServiceSettings.RegisterAllService();
+            LogService logService = new LogService();
+            logService.Information("Program Baþlatýldý");
             Application.Run(new Form1());
+            logService.Information("Program sonlandýrýldý");
         }
     }
 }

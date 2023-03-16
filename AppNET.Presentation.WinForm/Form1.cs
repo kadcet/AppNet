@@ -10,13 +10,16 @@ namespace AppNET.Presentation.WinForm
     {
         public Form1()
         {
+            
             InitializeComponent();
+            
         }
 
         
         ICategoryService categoryService = IOCContainer.Resolve<ICategoryService>();
         IProductService productService = IOCContainer.Resolve<IProductService>();
         ICaseSevice caseSevice=IOCContainer.Resolve<ICaseSevice>();
+        ILogService logService = IOCContainer.Resolve<ILogService>();
 
 
         private void FillProductGrid()
@@ -73,6 +76,7 @@ namespace AppNET.Presentation.WinForm
             {
                 //int id = Convert.ToInt32(txtCategoryId.Text);
                 categoryService.Created(Convert.ToInt32(txtCategoryId.Text), txtCategoryName.Text);
+                logService.Information(" kategori eklendi");
             }
             else
             {
@@ -80,9 +84,11 @@ namespace AppNET.Presentation.WinForm
                 btnSaveCategory.Text = "KAYDET";
                 groupBox1.Text = "Yeni Kategori";
                 txtCategoryId.Enabled = true;
+                logService.Information("Kategori güncellendi");
             }
             txtCategoryId.Text = "";
             txtCategoryName.Text = "";
+            //logService.Information("Ürün Alýndý");
 
             FillCombobox();
             FillCategoryGrid();
@@ -160,9 +166,11 @@ namespace AppNET.Presentation.WinForm
 
                 productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductAmount.Text), Convert.ToDecimal(txtProductPurchasePrice.Text), Convert.ToDecimal(txtProductSalesPrice.Text), Convert.ToDecimal(txtProductTotalPrice.Text));
                 MessageBox.Show($"{MyExtensions.FirstLetterUppercase(txtProductName.Text.ToString()) } Ürününden {txtProductAmount.Text.ToString()} Adet satýn alýndý");
-                
-                
+                logService.Information("Ürün eklendi");
+
+
                 caseSevice.Exp(MyExtensions.FirstLetterUppercase((txtProductName.Text.ToString().ToString()+" Ürününden "+ Convert.ToInt32(txtProductAmount.Text.ToString())+" Adet Alýnmýþtýr.")), Convert.ToInt32(txtProductAmount.Text), (Convert.ToDecimal(txtProductAmount.Text) * Convert.ToDecimal(txtProductPurchasePrice.Text)));
+                
 
                 FillCaseGrid();
                 FillBalance();
@@ -175,6 +183,7 @@ namespace AppNET.Presentation.WinForm
                 if (Convert.ToInt32(txtProductAmount.Text) > list.Amount)
                 {
                     MessageBox.Show($"En fazla {Convert.ToInt32(list.Amount)} adet ürün satýlabilir ");
+                    logService.Error($"{Convert.ToInt32(txtProductAmount.Text)} Yetersiz Stok");
                     return;
                 }
 

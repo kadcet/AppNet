@@ -16,11 +16,13 @@ namespace AppNET.App
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Log> _logRepository;
         
 
         public ProductService()
         {
             _productRepository = IOCContainer.Resolve<IRepository<Product>>();
+            _logRepository = IOCContainer.Resolve<IRepository<Log>>();
         }
         public void Created(int id, string categoryName, string productName, int productAmount, decimal productPurchasePrice, decimal productSalesPrice, decimal productTotalPrice)
         {
