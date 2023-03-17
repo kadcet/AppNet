@@ -16,8 +16,11 @@ namespace AppNET.Domain.Entities
             this.LogTime = DateTime.Now;
         }
 
-        public LogTypes logType;
-        public string LogMessage;
-        public DateTime LogTime;
+        public LogTypes logType { get; set; }
+        public string LogMessage { get; set; }
+        public DateTime LogTime { get; set; }
+
+
+        
     }
 }

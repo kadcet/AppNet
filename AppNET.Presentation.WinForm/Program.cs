@@ -17,7 +17,7 @@ namespace AppNET.Presentation.WinForm
             LogService logService = new LogService();
             logService.Information("Program Baþlatýldý");
             Application.Run(new Form1());
-            logService.Information("Program sonlandýrýldý");
+            
         }
     }
 }

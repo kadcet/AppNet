@@ -324,6 +324,10 @@ namespace AppNET.Presentation.WinForm
             grdCase.DataSource = caseSevice.CaseListExplanation();
         }
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            logService.Information("Program Sonlandýrýldý");
+            Application.Exit();
+        }
     }
 }
