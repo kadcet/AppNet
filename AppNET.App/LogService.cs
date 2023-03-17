@@ -23,6 +23,7 @@ namespace AppNET.App
             Log log = new Log();
             log.logType=LogTypes.Error;
             log.LogMessage = message;
+
             _logRepository.Add(log);
         }
 
